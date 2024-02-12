@@ -3,6 +3,8 @@ const cardTemplate =  document.querySelector('#card-template').content;
 // DOM узлы
 const content = document.querySelector('.content');
 const cardList = content.querySelector('.places__list');
+// Константы
+const cardSelector = '.card'
 
 /**
  * Функция создания карточки.
@@ -10,7 +12,7 @@ const cardList = content.querySelector('.places__list');
  * @param onDelete Обработчик удаления карточки.
  */
 function renderCard(cardData, onDelete) {
-    const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+    const cardElement = cardTemplate.querySelector(cardSelector).cloneNode(true);
     const image = cardElement.querySelector('.card__image');
 
     image.src = cardData.link;
@@ -27,7 +29,7 @@ function renderCard(cardData, onDelete) {
  * @param event Cобытие клика.
  */
 function deleteCard (event) {
-    event.target.closest('.card').remove();
+    event.target.closest(cardSelector).remove();
 }
 
 // Выводим карточки на страницу
