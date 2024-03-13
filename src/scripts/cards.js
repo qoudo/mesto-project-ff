@@ -24,7 +24,7 @@ export function likeCard (event) {
 /**
  * Функция создания карточки.
  * @param {Object} cardData Данные карточки.
- * @return {Node} Элемент карточки
+ * @return {Element} Элемент карточки
  */
 export function renderCard (cardData) {
   const cardElement = CARD_TEMPLATE.querySelector(CARD_SELECTOR).cloneNode(true)
