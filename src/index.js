@@ -1,22 +1,19 @@
-import { INITIAL_CARDS } from './scripts/constants'
-import { renderCard, addCard } from './scripts/cards'
+import { INITIAL_CARDS, POPUPS_KEYS } from './scripts/constants'
+import { renderCard } from './scripts/cards'
 
 import './styles/index.css'
 import { openPopup } from './scripts/popups'
 
-const content = document.querySelector('.content')
-const cardList = content.querySelector('.places__list')
-const formElement = document.forms['new-place']
+const CONTENT = document.querySelector('.content')
+const CARD_LIST = CONTENT.querySelector('.places__list')
 
-const buttons = [
-  { edit: content.querySelector('.profile__edit-button'), name: 'edit' },
-  { addCard: content.querySelector('.profile__add-button'), name: 'addCard' }
+const BUTTONS = [
+  { edit: CONTENT.querySelector('.profile__edit-button'), name: POPUPS_KEYS.edit },
+  { addCard: CONTENT.querySelector('.profile__add-button'), name: POPUPS_KEYS.addCard }
 ]
 
 // Выводим карточки на страницу
-cardList.append(...INITIAL_CARDS.map((data) => renderCard(data)))
+CARD_LIST.append(...INITIAL_CARDS.map((data) => renderCard(data)))
 
 // Открытие попапа
-buttons.forEach(({ name, ...item }) => item[name].addEventListener('click', () => openPopup(name)))
-
-formElement.addEventListener('submit', addCard)
+BUTTONS.forEach(({ name, ...item }) => item[name].addEventListener('click', () => openPopup(name)))

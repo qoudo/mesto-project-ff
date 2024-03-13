@@ -25,4 +25,8 @@ export const INITIAL_CARDS = [
   }
 ]
 
-export const CARD_SELECTOR = '.card'
+export const POPUPS_KEYS = {
+  edit: 'edit',
+  addCard: 'addCard',
+  gallery: 'gallery'
+}

@@ -1,13 +1,13 @@
 /**
- * Инициализирует форму редактирования профиля.
+ * Инициализирует галерею.
  */
 export function initGallery (data) {
   const popup = document.querySelector('.popup_type_image')
   const img = popup.querySelector('.popup__image')
   const caption = popup.querySelector('.popup__caption')
 
-  img.src = data.src
-  img.alt = data.description
+  img.src = data.link
+  img.alt = data.name
 
-  caption.innerText = data.description
+  caption.innerText = data.name
 }

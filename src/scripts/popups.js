@@ -1,56 +1,60 @@
 import { initEditForm } from './profile'
 import { initGallery } from './gallery'
+import { POPUPS_KEYS } from './constants'
 
-const popups = {
+const POPUPS = {
   edit: document.querySelector('.popup_type_edit'),
   addCard: document.querySelector('.popup_type_new-card'),
   gallery: document.querySelector('.popup_type_image')
 }
 
-/**
- * Открытие popup'а.
- * @param {string} name Название popup'а.
- * @param {object} data Данные popup'а.
- */
-export function openPopup (name, data) {
-  popups[name].classList.add('popup_is-opened')
-
-  switch (name) {
-    case 'edit':
-      initEditForm()
-      break
-    case 'gallery':
-      initGallery(data)
-      break
-  }
-
-  popups[name].addEventListener('click', handleClickOverlay)
-  document.addEventListener('keydown', handleKeyDownEsc, { once: true })
-  popups[name].querySelector('.popup__close').addEventListener('click', closePopup, { once: true })
-}
+const CURRENT_POPUP_SELECTOR = 'popup_is-opened'
 
 /**
  * Закрытие popup'а.
  */
 export function closePopup () {
-  document.querySelector('.popup_is-opened').classList.remove('popup_is-opened')
+  document.querySelector(`.${CURRENT_POPUP_SELECTOR}`).classList.remove(CURRENT_POPUP_SELECTOR)
 }
 
 /**
  * Обработчик нажатие кнопки "Esc".
- * @param {object} evt Данные события.
+ * @param {KeyboardEvent} event Данные события.
  */
-export function handleKeyDownEsc (evt) {
-  evt.key === 'Escape' && closePopup()
+export function handleKeyDownEsc (event) {
+  event.key === 'Escape' && closePopup()
 }
 
 /**
  * Обработчик клика по Overlay.
- * @param {object} evt Данные события.
+ * @param {Event} event Данные события.
  */
-export function handleClickOverlay (evt) {
-  if (evt.target.classList.contains('popup_is-opened')) {
+export function handleClickOverlay (event) {
+  if (event.target.classList.contains(CURRENT_POPUP_SELECTOR)) {
     closePopup()
-    evt.target.removeEventListener('click', handleClickOverlay)
+    event.target.removeEventListener('click', handleClickOverlay)
   }
+}
+
+/**
+ * Открытие popup'а.
+ * @param {string} name Название popup'а.
+ * @param {object} [data] Данные popup'а.
+ */
+export function openPopup (name, data) {
+  POPUPS[name].classList.add(CURRENT_POPUP_SELECTOR)
+
+  switch (name) {
+    case POPUPS_KEYS.edit:
+      initEditForm()
+      break
+    case POPUPS_KEYS.gallery:
+      initGallery(data)
+      break
+  }
+
+  // Навешиваем обработчики закрытия модального окна
+  POPUPS[name].addEventListener('click', handleClickOverlay)
+  document.addEventListener('keydown', handleKeyDownEsc, { once: true })
+  POPUPS[name].querySelector('.popup__close').addEventListener('click', closePopup, { once: true })
 }

@@ -1,20 +1,20 @@
 import { closePopup } from './popups'
 
-const formElement = document.forms['edit-profile']
-
-const profileData = {
+const FORM_ELEMENT = document.forms['edit-profile']
+const PROFILE_NODES = {
   name: document.querySelector('.profile__title'),
   description: document.querySelector('.profile__description')
 }
 
 /**
  * Обработчик отправки формы.
+ * @param {Event} event Cобытие клика.
  */
-function handleEditFormSubmit (evt) {
-  evt.preventDefault()
+function handleEditFormSubmit (event) {
+  event.preventDefault()
 
-  profileData.name.textContent = formElement.name.value
-  profileData.description.textContent = formElement.description.value
+  PROFILE_NODES.name.textContent = FORM_ELEMENT.name.value
+  PROFILE_NODES.description.textContent = FORM_ELEMENT.description.value
 
   closePopup()
 }
@@ -23,8 +23,9 @@ function handleEditFormSubmit (evt) {
  * Инициализирует форму редактирования профиля.
  */
 export function initEditForm () {
-  formElement.name.value = profileData.name.textContent
-  formElement.description.value = profileData.description.textContent
+  FORM_ELEMENT.name.value = PROFILE_NODES.name.textContent
+  FORM_ELEMENT.description.value = PROFILE_NODES.description.textContent
 }
 
-formElement.addEventListener('submit', handleEditFormSubmit)
+// Навешиваем обработчик клика на кнопку отправки формы
+FORM_ELEMENT.addEventListener('submit', handleEditFormSubmit)
