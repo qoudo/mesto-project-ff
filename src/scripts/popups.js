@@ -1,3 +1,5 @@
+import {initEditForm} from "./profile";
+import {initGallery} from "./gallery";
 
 const popups = {
     edit: document.querySelector('.popup_type_edit'),
@@ -7,10 +9,20 @@ const popups = {
 
 /**
  * Открытие popup'а.
- * @param {string} name Данные карточки.
+ * @param {string} name Название popup'а.
+ * @param {object} data Данные popup'а.
  */
-export function openPopup(name) {
+export function openPopup(name, data) {
     popups[name].classList.add('popup_is-opened');
+
+    switch (name) {
+        case 'edit':
+            initEditForm();
+            break;
+        case 'gallery':
+            initGallery(data);
+            break;
+    }
 
     popups[name].addEventListener('click', handleClickOverlay);
     document.addEventListener('keydown', handleKeyDownEsc,  { once: true });
@@ -26,7 +38,7 @@ export function closePopup() {
 
 /**
  * Обработчик нажатие кнопки "Esc".
- * @param {object} evt Данные карточки.
+ * @param {object} evt Данные события.
  */
 export function handleKeyDownEsc(evt) {
    evt.key === 'Escape' && closePopup();
@@ -34,7 +46,7 @@ export function handleKeyDownEsc(evt) {
 
 /**
  * Обработчик клика по Overlay.
- * @param {object} evt Данные карточки.
+ * @param {object} evt Данные события.
  */
 export function handleClickOverlay(evt) {
     if (evt.target.classList.contains('popup_is-opened')) {
