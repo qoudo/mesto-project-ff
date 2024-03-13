@@ -40,7 +40,7 @@ export function handleClickOverlay (event) {
 export function openPopup (name, callback) {
   POPUPS[name].classList.add(CURRENT_POPUP_SELECTOR)
 
-  callback && callback();
+  callback && callback()
 
   // Навешиваем обработчики закрытия модального окна
   POPUPS[name].addEventListener('click', handleClickOverlay)

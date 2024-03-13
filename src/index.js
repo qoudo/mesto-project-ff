@@ -1,8 +1,8 @@
 import { initialsCards } from './scripts/teamplate'
-import {deleteCard, likeCard, renderCard} from './scripts/cards'
-import {closePopup, openPopup} from './scripts/popups'
-import {handleEditFormSubmit, initEditForm} from "./scripts/profile";
-import {initGallery} from "./scripts/gallery";
+import { deleteCard, likeCard, renderCard } from './scripts/cards'
+import { closePopup, openPopup } from './scripts/popups'
+import { handleEditFormSubmit, initEditForm } from './scripts/profile'
+import { initGallery } from './scripts/gallery'
 
 import './styles/index.css'
 
@@ -15,7 +15,7 @@ export const popupKeys = {
 }
 const forms = {
   edit: document.forms['edit-profile'],
-  addCard: document.forms['new-place'],
+  addCard: document.forms['new-place']
 }
 const buttons = [
   { edit: content.querySelector('.profile__edit-button'), name: popupKeys.edit, callback: initEditForm },
@@ -26,12 +26,11 @@ const buttons = [
  * Возвращает элемент карточки.
  * @param {object} data Данные карточки.
  */
-const getCardElement = (data)=> renderCard(data, {
+const getCardElement = (data) => renderCard(data, {
   deleteCard,
   likeCard,
-  openGallery: () => openPopup(popupKeys.gallery, () => initGallery(data)),
+  openGallery: () => openPopup(popupKeys.gallery, () => initGallery(data))
 })
-
 
 // Выводим карточки на страницу
 cardList.append(...initialsCards.map(getCardElement))
@@ -41,7 +40,7 @@ buttons.forEach(({ name, callback, ...item }) => item[name].addEventListener('cl
 
 // Слушаем событие отправки формы "Редактировать профиль"
 forms.edit.addEventListener('submit', (event) => {
-  handleEditFormSubmit(event);
+  handleEditFormSubmit(event)
   closePopup()
 })
 
@@ -50,8 +49,8 @@ forms.addCard.addEventListener('submit', (event) => {
   event.preventDefault()
   cardList.prepend(getCardElement({
     name: forms.addCard['place-name'].value,
-    link: forms.addCard.link.value,
+    link: forms.addCard.link.value
   }))
-  closePopup();
-  forms.addCard.reset();
+  closePopup()
+  forms.addCard.reset()
 })
