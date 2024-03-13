@@ -1,8 +1,8 @@
 import { INITIAL_CARDS, POPUPS_KEYS } from './scripts/constants'
 import { renderCard } from './scripts/cards'
+import { openPopup } from './scripts/popups'
 
 import './styles/index.css'
-import { openPopup } from './scripts/popups'
 
 const CONTENT = document.querySelector('.content')
 const CARD_LIST = CONTENT.querySelector('.places__list')
