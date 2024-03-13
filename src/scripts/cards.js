@@ -2,16 +2,14 @@ import { CARD_SELECTOR } from './constants';
 
 // Темплейт карточки
 const cardTemplate =  document.querySelector('#card-template').content;
-// DOM узлы
-const content = document.querySelector('.content');
 
 /**
  * Функция создания карточки.
- * @param cardData Данные карточки.
- * @param onDelete Обработчик удаления карточки.
+ * @param {Object} cardData Данные карточки.
+ * @param {function} onDelete Обработчик удаления карточки.
  */
-function renderCard(cardData, onDelete) {
-    const cardElement = cardTemplate.querySelector(cardSelector).cloneNode(true);
+export function renderCard(cardData, onDelete) {
+    const cardElement = cardTemplate.querySelector(CARD_SELECTOR).cloneNode(true);
     const image = cardElement.querySelector('.card__image');
 
     image.src = cardData.link;
@@ -25,8 +23,8 @@ function renderCard(cardData, onDelete) {
 
 /**
  * Функция удаления карточки.
- * @param event Cобытие клика.
+ * @param {object} event Cобытие клика.
  */
-function deleteCard (event) {
+export function deleteCard (event) {
     event.target.closest(CARD_SELECTOR).remove();
 }
