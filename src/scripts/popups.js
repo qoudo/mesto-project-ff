@@ -1,7 +1,3 @@
-import { initEditForm } from './profile'
-import { initGallery } from './gallery'
-import { POPUPS_KEYS } from './constants'
-
 const POPUPS = {
   edit: document.querySelector('.popup_type_edit'),
   addCard: document.querySelector('.popup_type_new-card'),
@@ -39,19 +35,12 @@ export function handleClickOverlay (event) {
 /**
  * Открытие popup'а.
  * @param {string} name Название popup'а.
- * @param {object} [data] Данные popup'а.
+ * @param {function} [callback] Функция callback.
  */
-export function openPopup (name, data) {
+export function openPopup (name, callback) {
   POPUPS[name].classList.add(CURRENT_POPUP_SELECTOR)
 
-  switch (name) {
-    case POPUPS_KEYS.edit:
-      initEditForm()
-      break
-    case POPUPS_KEYS.gallery:
-      initGallery(data)
-      break
-  }
+  callback && callback();
 
   // Навешиваем обработчики закрытия модального окна
   POPUPS[name].addEventListener('click', handleClickOverlay)

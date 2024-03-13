@@ -1,19 +1,57 @@
-import { INITIAL_CARDS, POPUPS_KEYS } from './scripts/constants'
-import { renderCard } from './scripts/cards'
-import { openPopup } from './scripts/popups'
+import { initialsCards } from './scripts/teamplate'
+import {deleteCard, likeCard, renderCard} from './scripts/cards'
+import {closePopup, openPopup} from './scripts/popups'
+import {handleEditFormSubmit, initEditForm} from "./scripts/profile";
+import {initGallery} from "./scripts/gallery";
 
 import './styles/index.css'
 
-const CONTENT = document.querySelector('.content')
-const CARD_LIST = CONTENT.querySelector('.places__list')
-
-const BUTTONS = [
-  { edit: CONTENT.querySelector('.profile__edit-button'), name: POPUPS_KEYS.edit },
-  { addCard: CONTENT.querySelector('.profile__add-button'), name: POPUPS_KEYS.addCard }
+const content = document.querySelector('.content')
+const cardList = content.querySelector('.places__list')
+export const popupKeys = {
+  edit: 'edit',
+  addCard: 'addCard',
+  gallery: 'gallery'
+}
+const forms = {
+  edit: document.forms['edit-profile'],
+  addCard: document.forms['new-place'],
+}
+const buttons = [
+  { edit: content.querySelector('.profile__edit-button'), name: popupKeys.edit, callback: initEditForm },
+  { addCard: content.querySelector('.profile__add-button'), name: popupKeys.addCard }
 ]
 
-// Выводим карточки на страницу
-CARD_LIST.append(...INITIAL_CARDS.map((data) => renderCard(data)))
+/**
+ * Возвращает элемент карточки.
+ * @param {object} data Данные карточки.
+ */
+const getCardElement = (data)=> renderCard(data, {
+  deleteCard,
+  likeCard,
+  openGallery: () => openPopup(popupKeys.gallery, () => initGallery(data)),
+})
 
-// Открытие попапа
-BUTTONS.forEach(({ name, ...item }) => item[name].addEventListener('click', () => openPopup(name)))
+
+// Выводим карточки на страницу
+cardList.append(...initialsCards.map(getCardElement))
+
+// Открытие попапов
+buttons.forEach(({ name, callback, ...item }) => item[name].addEventListener('click', () => openPopup(name, callback)))
+
+// Слушаем событие отправки формы "Редактировать профиль"
+forms.edit.addEventListener('submit', (event) => {
+  handleEditFormSubmit(event);
+  closePopup()
+})
+
+// Слушаем событие отправки формы "Добавить карточку"
+forms.addCard.addEventListener('submit', (event) => {
+  event.preventDefault()
+  cardList.prepend(getCardElement({
+    name: forms.addCard['place-name'].value,
+    link: forms.addCard.link.value,
+  }))
+  closePopup();
+  forms.addCard.reset();
+})

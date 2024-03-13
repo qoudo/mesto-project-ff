@@ -1,4 +1,4 @@
-export const INITIAL_CARDS = [
+export const initialsCards = [
   {
     name: 'Архыз',
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
@@ -24,9 +24,3 @@ export const INITIAL_CARDS = [
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ]
-
-export const POPUPS_KEYS = {
-  edit: 'edit',
-  addCard: 'addCard',
-  gallery: 'gallery'
-}
