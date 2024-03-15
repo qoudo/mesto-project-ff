@@ -1,15 +1,16 @@
-const popups = {
-  edit: document.querySelector('.popup_type_edit'),
-  addCard: document.querySelector('.popup_type_new-card'),
-  gallery: document.querySelector('.popup_type_image')
-}
 const currentPopupSelector = 'popup_is-opened'
 
 /**
  * Закрытие popup'а.
  */
 export function closePopup () {
-  document.querySelector(`.${currentPopupSelector}`).classList.remove(currentPopupSelector)
+  const currentPopupElement = document.querySelector(`.${currentPopupSelector}`)
+
+  currentPopupElement.removeEventListener('mousedown', handleClickOverlay)
+  document.removeEventListener('keydown', handleKeyDownEsc)
+  currentPopupElement.querySelector('.popup__close').removeEventListener('click', closePopup)
+
+  currentPopupElement.classList.remove(currentPopupSelector)
 }
 
 /**
@@ -26,23 +27,19 @@ export function handleKeyDownEsc (event) {
  */
 export function handleClickOverlay (event) {
   if (event.target.classList.contains(currentPopupSelector)) {
-    closePopup()
-    event.target.removeEventListener('click', handleClickOverlay)
+    closePopup(event)
   }
 }
 
 /**
  * Открытие popup'а.
- * @param {string} name Название popup'а.
- * @param {function} [callback] Функция callback.
+ * @param {Element} element Название popup'а.
  */
-export function openPopup (name, callback) {
-  popups[name].classList.add(currentPopupSelector)
-
-  callback && callback()
+export function openPopup (element) {
+  element.classList.add(currentPopupSelector)
 
   // Навешиваем обработчики закрытия модального окна
-  popups[name].addEventListener('click', handleClickOverlay)
-  document.addEventListener('keydown', handleKeyDownEsc, { once: true })
-  popups[name].querySelector('.popup__close').addEventListener('click', closePopup, { once: true })
+  element.addEventListener('mousedown', handleClickOverlay)
+  document.addEventListener('keydown', handleKeyDownEsc)
+  element.querySelector('.popup__close').addEventListener('click', closePopup)
 }

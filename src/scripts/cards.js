@@ -1,5 +1,6 @@
+const cardSelector = '.card'
+
 const cardTemplate = document.querySelector('#card-template').content
-export const cardSelector = '.card'
 
 /**
  * Функция удаления карточки.
@@ -18,6 +19,22 @@ export function likeCard (event) {
 }
 
 /**
+ * Возвращает элементы карточки.
+ * @param {Element} element Данные карточки.
+ * @return {Object} Элементы карточки.
+ */
+const getCardElements = (element) => ({
+  contents: {
+    title: element.querySelector('.card__title'),
+    image: element.querySelector('.card__image')
+  },
+  buttons: {
+    delete: element.querySelector('.card__delete-button'),
+    like: element.querySelector('.card__like-button')
+  }
+})
+
+/**
  * Функция создания карточки.
  * @param {Object} cardData Данные карточки.
  * @param {Object} callbacks Функции callback.
@@ -25,15 +42,16 @@ export function likeCard (event) {
  */
 export function renderCard (cardData, callbacks) {
   const cardElement = cardTemplate.querySelector(cardSelector).cloneNode(true)
-  const image = cardElement.querySelector('.card__image')
+  const { contents, buttons } = getCardElements(cardElement)
 
-  image.src = cardData.link
-  image.alt = cardData.name
+  contents.image.src = cardData.link
+  contents.image.alt = cardData.name
 
-  cardElement.querySelector('.card__title').textContent = cardData.name
-  cardElement.querySelector('.card__delete-button').onclick = callbacks.deleteCard
-  cardElement.querySelector('.card__like-button').onclick = callbacks.likeCard
-  cardElement.querySelector('.card__image').onclick = callbacks.openGallery
+  contents.title.textContent = cardData.name
+
+  buttons.delete.addEventListener('click', callbacks.deleteCard)
+  buttons.like.addEventListener('click', callbacks.likeCard)
+  contents.image.addEventListener('click', callbacks.openGallery)
 
   return cardElement
 }

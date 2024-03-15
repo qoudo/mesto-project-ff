@@ -1,4 +1,4 @@
-import { initialsCards } from './scripts/teamplate'
+import { initialsCards } from './scripts/initials-cards'
 import { deleteCard, likeCard, renderCard } from './scripts/cards'
 import { closePopup, openPopup } from './scripts/popups'
 import { handleEditFormSubmit, initEditForm } from './scripts/profile'
@@ -18,9 +18,31 @@ const forms = {
   addCard: document.forms['new-place']
 }
 const buttons = [
-  { edit: content.querySelector('.profile__edit-button'), name: popupKeys.edit, callback: initEditForm },
+  { edit: content.querySelector('.profile__edit-button'), name: popupKeys.edit },
   { addCard: content.querySelector('.profile__add-button'), name: popupKeys.addCard }
 ]
+const popups = {
+  edit: document.querySelector('.popup_type_edit'),
+  addCard: document.querySelector('.popup_type_new-card'),
+  gallery: document.querySelector('.popup_type_image')
+}
+
+/**
+ * Обработчик открытия popup'а.
+ * @param {string} name Название popup'а.
+ * @param {object} [data] Данные popup'а.
+ */
+export function handleOpenPopup (name, data) {
+  switch (name) {
+    case popupKeys.edit:
+      initEditForm()
+      break
+    case popupKeys.gallery:
+      initGallery(data)
+      break
+  }
+  openPopup(popups[name])
+}
 
 /**
  * Возвращает элемент карточки.
@@ -29,14 +51,14 @@ const buttons = [
 const getCardElement = (data) => renderCard(data, {
   deleteCard,
   likeCard,
-  openGallery: () => openPopup(popupKeys.gallery, () => initGallery(data))
+  openGallery: () => handleOpenPopup(popupKeys.gallery, data)
 })
 
 // Выводим карточки на страницу
 cardList.append(...initialsCards.map(getCardElement))
 
 // Открытие попапов
-buttons.forEach(({ name, callback, ...item }) => item[name].addEventListener('click', () => openPopup(name, callback)))
+buttons.forEach(({ name, ...item }) => item[name].addEventListener('click', () => handleOpenPopup(name)))
 
 // Слушаем событие отправки формы "Редактировать профиль"
 forms.edit.addEventListener('submit', (event) => {
