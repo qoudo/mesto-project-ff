@@ -1,4 +1,4 @@
-const formElement = document.forms['edit-profile']
+const profileForm = document.forms['edit-profile']
 const profileElements = {
   name: document.querySelector('.profile__title'),
   description: document.querySelector('.profile__description')
@@ -11,14 +11,14 @@ const profileElements = {
 export function handleEditFormSubmit (event) {
   event.preventDefault()
 
-  profileElements.name.textContent = formElement.name.value
-  profileElements.description.textContent = formElement.description.value
+  profileElements.name.textContent = profileForm.name.value
+  profileElements.description.textContent = profileForm.description.value
 }
 
 /**
  * Инициализирует форму редактирования профиля.
  */
 export function initEditForm () {
-  formElement.name.value = profileElements.name.textContent
-  formElement.description.value = profileElements.description.textContent
+  profileForm.name.value = profileElements.name.textContent
+  profileForm.description.value = profileElements.description.textContent
 }
