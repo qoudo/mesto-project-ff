@@ -1,4 +1,3 @@
-const profileForm = document.forms['edit-profile']
 const profileElements = {
   name: document.querySelector('.profile__title'),
   description: document.querySelector('.profile__description')
@@ -7,8 +6,9 @@ const profileElements = {
 /**
  * Обработчик отправки формы.
  * @param {Event} event Cобытие клика.
+ * @param {Element} profileForm Форма профиля.
  */
-export function handleEditFormSubmit (event) {
+export function handleEditFormSubmit (event, profileForm) {
   event.preventDefault()
 
   profileElements.name.textContent = profileForm.name.value
@@ -17,8 +17,9 @@ export function handleEditFormSubmit (event) {
 
 /**
  * Инициализирует форму редактирования профиля.
+ * @param {Element} profileForm Форма профиля.
  */
-export function initEditForm () {
+export function initEditForm (profileForm) {
   profileForm.name.value = profileElements.name.textContent
   profileForm.description.value = profileElements.description.textContent
 }

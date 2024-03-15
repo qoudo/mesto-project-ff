@@ -35,7 +35,7 @@ const popups = {
 export function handleOpenPopup (name, data) {
   switch (name) {
     case popupKeys.edit:
-      initEditForm()
+      initEditForm(forms.edit)
       break
     case popupKeys.gallery:
       initGallery(data)
@@ -62,7 +62,7 @@ buttons.forEach(({ name, ...item }) => item[name].addEventListener('click', () =
 
 // Слушаем событие отправки формы "Редактировать профиль"
 forms.edit.addEventListener('submit', (event) => {
-  handleEditFormSubmit(event)
+  handleEditFormSubmit(event, forms.edit)
   closePopup()
 })
 
