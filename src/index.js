@@ -3,6 +3,7 @@ import { deleteCard, likeCard, renderCard } from './scripts/cards'
 import { closePopup, openPopup } from './scripts/popups'
 import { handleEditFormSubmit, initEditForm } from './scripts/profile'
 import { initGallery } from './scripts/gallery'
+import { enableValidation, clearValidation } from './scripts/validation';
 
 import './styles/index.css'
 
@@ -27,6 +28,15 @@ const popups = {
   gallery: document.querySelector('.popup_type_image')
 }
 
+const commonPopupSelectors = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
 /**
  * Обработчик открытия popup'а.
  * @param {string} name Название popup'а.
@@ -41,6 +51,8 @@ export function handleOpenPopup (name, data) {
       initGallery(data)
       break
   }
+
+  clearValidation(commonPopupSelectors);
   openPopup(popups[name])
 }
 
@@ -76,3 +88,5 @@ forms.addCard.addEventListener('submit', (event) => {
   closePopup()
   forms.addCard.reset()
 })
+
+enableValidation(commonPopupSelectors);
