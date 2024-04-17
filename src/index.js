@@ -3,7 +3,7 @@ import { deleteCard, likeCard, renderCard } from './scripts/cards'
 import { closePopup, openPopup } from './scripts/popups'
 import { handleEditFormSubmit, initEditForm } from './scripts/profile'
 import { initGallery } from './scripts/gallery'
-import { enableValidation, clearValidation } from './scripts/validation';
+import { enableValidation, clearValidation } from './scripts/validation'
 
 import './styles/index.css'
 
@@ -34,7 +34,7 @@ const popupSelectors = {
   inactiveButtonClass: 'popup__button_disabled',
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__error_visible'
-};
+}
 
 /**
  * Обработчик открытия popup'а.
@@ -51,7 +51,7 @@ export function handleOpenPopup (name, data) {
       break
   }
 
-  clearValidation(popupSelectors);
+  clearValidation(popupSelectors)
   openPopup(popups[name])
 }
 
@@ -89,4 +89,4 @@ forms.addCard.addEventListener('submit', (event) => {
 })
 
 // Запускаем валидацию форм
-enableValidation(popupSelectors);
+enableValidation(popupSelectors)
