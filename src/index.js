@@ -27,8 +27,7 @@ const popups = {
   addCard: document.querySelector('.popup_type_new-card'),
   gallery: document.querySelector('.popup_type_image')
 }
-
-const commonPopupSelectors = {
+const popupSelectors = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button',
@@ -52,7 +51,7 @@ export function handleOpenPopup (name, data) {
       break
   }
 
-  clearValidation(commonPopupSelectors);
+  clearValidation(popupSelectors);
   openPopup(popups[name])
 }
 
@@ -89,4 +88,5 @@ forms.addCard.addEventListener('submit', (event) => {
   forms.addCard.reset()
 })
 
-enableValidation(commonPopupSelectors);
+// Запускаем валидацию форм
+enableValidation(popupSelectors);
