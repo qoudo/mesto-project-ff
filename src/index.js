@@ -1,11 +1,10 @@
-import { initialsCards } from './scripts/initials-cards'
 import { deleteCard, likeCard, renderCard } from './scripts/cards'
 import { closePopup, openPopup } from './scripts/popups'
-import { handleEditFormSubmit, initEditForm } from './scripts/profile'
+import { handleEditFormSubmit, initEditForm, initialProfile } from './scripts/profile'
 import { initGallery } from './scripts/gallery'
 import { enableValidation, clearValidation } from './scripts/validation'
-
 import './styles/index.css'
+import { RemoteAPI } from './scripts/api'
 
 const content = document.querySelector('.content')
 const cardList = content.querySelector('.places__list')
@@ -65,9 +64,6 @@ const getCardElement = (data) => renderCard(data, {
   openGallery: () => handleOpenPopup(popupKeys.gallery, data)
 })
 
-// Выводим карточки на страницу
-cardList.append(...initialsCards.map(getCardElement))
-
 // Открытие попапов
 buttons.forEach(({ name, ...item }) => item[name].addEventListener('click', () => handleOpenPopup(name)))
 
@@ -90,3 +86,15 @@ forms.addCard.addEventListener('submit', (event) => {
 
 // Запускаем валидацию форм
 enableValidation(popupSelectors)
+
+// Инициализируем загрузку данных пользотвателя и карточек
+Promise.all([RemoteAPI.getUser(), RemoteAPI.getCards()])
+  .then(([{ _id: id, ...user }, cards]) => {
+    // Инициализация пользователя
+    initialProfile(user)
+    // Выводим карточки на страницу
+    cardList.append(...cards.map(getCardElement))
+  })
+  .catch((error) => {
+    console.error(error)
+  })
