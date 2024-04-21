@@ -7,6 +7,12 @@ const config = {
 }
 
 /**
+ * Обрабатывает ошибки.
+ * @param {string} error Текст ошибки.
+ */
+export const handleError = error => console.error(error)
+
+/**
  * Обрабатывает ответ сервера.
  * @param {Object} response Ответ сервера.
  * @return {Object || Promise} Обработанный ответ.
@@ -20,7 +26,7 @@ export const handleResponse = response => {
 }
 
 export const RemoteAPI = {
-    /**
+  /**
      * Получение данных карточек.
      * @return {Promise} Промис ответа.
      */
@@ -29,7 +35,7 @@ export const RemoteAPI = {
       headers: config.headers
     }).then(handleResponse),
 
-    /**
+  /**
      * Получение данных пользователя.
      * @return {Promise} Промис ответа.
      */
@@ -38,7 +44,7 @@ export const RemoteAPI = {
       headers: config.headers
     }).then(handleResponse),
 
-    /**
+  /**
      * Обновление данных пользователя.
      * @param {Object} data Данные пользователя.
      * @return {Promise} Промис ответа.
@@ -50,7 +56,7 @@ export const RemoteAPI = {
       body: JSON.stringify(data)
     }).then(handleResponse),
 
-    /**
+  /**
      * Добавление карточки.
      * @param {Object} data Данные карточки.
      * @return {Promise} Промис ответа.
@@ -62,7 +68,7 @@ export const RemoteAPI = {
       body: JSON.stringify(data)
     }).then(handleResponse),
 
-    /**
+  /**
      * Удаление карточки.
      * @param {number} id Индентификатор карточки.
      * @return {Promise} Промис ответа.

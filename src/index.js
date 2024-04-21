@@ -1,10 +1,10 @@
 import { deleteCard, likeCard, renderCard } from './scripts/cards'
 import { closePopup, openPopup } from './scripts/popups'
-import { handleEditFormSubmit, initEditForm, initialProfile } from './scripts/profile'
+import { initEditForm, addProfile } from './scripts/profile'
 import { initGallery } from './scripts/gallery'
 import { enableValidation, clearValidation } from './scripts/validation'
 import './styles/index.css'
-import { RemoteAPI } from './scripts/api'
+import { handleError, RemoteAPI } from './scripts/api'
 
 const content = document.querySelector('.content')
 const cardList = content.querySelector('.places__list')
@@ -69,19 +69,37 @@ buttons.forEach(({ name, ...item }) => item[name].addEventListener('click', () =
 
 // Слушаем событие отправки формы "Редактировать профиль"
 forms.edit.addEventListener('submit', (event) => {
-  handleEditFormSubmit(event, forms.edit)
-  closePopup()
+  event.preventDefault()
+
+  RemoteAPI.updateUser({
+    name: forms.edit.name.value,
+    about: forms.edit.description.value
+  })
+    .then((data) => {
+      addProfile(data)
+      closePopup()
+    })
+    .catch(handleError)
 })
 
 // Слушаем событие отправки формы "Добавить карточку"
 forms.addCard.addEventListener('submit', (event) => {
   event.preventDefault()
-  cardList.prepend(getCardElement({
+
+  RemoteAPI.addCard({
     name: forms.addCard['place-name'].value,
     link: forms.addCard.link.value
-  }))
-  closePopup()
-  forms.addCard.reset()
+  })
+    .then((data) => {
+      cardList.prepend(getCardElement({
+        name: data.name,
+        link: data.link
+      }))
+
+      closePopup()
+      forms.addCard.reset()
+    })
+    .catch(handleError)
 })
 
 // Запускаем валидацию форм
@@ -91,10 +109,8 @@ enableValidation(popupSelectors)
 Promise.all([RemoteAPI.getUser(), RemoteAPI.getCards()])
   .then(([{ _id: id, ...user }, cards]) => {
     // Инициализация пользователя
-    initialProfile(user)
+    addProfile(user)
     // Выводим карточки на страницу
     cardList.append(...cards.map(getCardElement))
   })
-  .catch((error) => {
-    console.error(error)
-  })
+  .catch(handleError)
