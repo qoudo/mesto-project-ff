@@ -15,7 +15,7 @@ export const handleError = error => console.error(error)
 /**
  * Обрабатывает ответ сервера.
  * @param {Object} response Ответ сервера.
- * @return {Object || Promise} Обработанный ответ.
+ * @return {any} Обработанный ответ.
  */
 export const handleResponse = response => {
   if (response.ok) {
