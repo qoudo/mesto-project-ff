@@ -1,4 +1,4 @@
-import { deleteCard, likeCard, renderCard } from './scripts/cards'
+import {cardSelector, deleteCard, likeCard, renderCard} from './scripts/cards'
 import { closePopup, openPopup } from './scripts/popups'
 import { initEditForm, addProfile } from './scripts/profile'
 import { initGallery } from './scripts/gallery'
@@ -35,22 +35,17 @@ const popupSelectors = {
   errorClass: 'popup__error_visible'
 }
 
-const handleCardDelete = ({ cardId, buttonElement }) => {
-  // так как по сути кнопка "Да" все равно выполняет только ровно одну операцию как confirm()
-  popupConfirmButton.onclick = () => {
-    buttonElement.disabled = true;
-
-    APIDeleteCard(cardId)
+/**
+ * Обработчик удаления карточки.
+ * @param {CloseEvent} event Cобытие клика.
+ * @param {number} cardId Индентификатор карточки.
+ */
+const handleCardDelete = (event, cardId) => {
+    RemoteAPI.deleteCard(cardId)
         .then(() => {
-          buttonElement.closest('.card').remove();
-
-          closeModal(popupConfirm);
+          event.target.closest(cardSelector).remove();
         })
-        .catch((error) => {
-          buttonElement.disabled = false;
-          console.error(error);
-        });
-  };
+        .catch(handleError);
 };
 
 /**
@@ -75,9 +70,10 @@ export function handleOpenPopup (name, data) {
 /**
  * Возвращает элемент карточки.
  * @param {object} data Данные карточки.
+ * @param {number} userId Индентификатор пользователя.
  */
-const getCardElement = (data) => renderCard(data, {
-  deleteCard,
+const getCardElement = (data, userId) => renderCard(data, userId, {
+  deleteCard: handleCardDelete,
   likeCard,
   openGallery: () => handleOpenPopup(popupKeys.gallery, data)
 })
@@ -126,6 +122,6 @@ Promise.all([RemoteAPI.getUser(), RemoteAPI.getCards()])
     // Инициализация пользователя
     addProfile(user)
     // Выводим карточки на страницу
-    cardList.append(...cards.map(getCardElement))
+    cardList.append(...cards.map( (item) => getCardElement(item, id)))
   })
   .catch(handleError)

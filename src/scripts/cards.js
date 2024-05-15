@@ -1,14 +1,6 @@
-const cardSelector = '.card'
+export const cardSelector = '.card'
 
 const cardTemplate = document.querySelector('#card-template').content
-
-/**
- * Функция удаления карточки.
- * @param {Event} event Cобытие клика.
- */
-export function deleteCard (event) {
-  event.target.closest(cardSelector).remove()
-}
 
 /**
  * Функция лайка карточки.
@@ -38,12 +30,14 @@ const getCardElements = (element) => ({
 /**
  * Функция создания карточки.
  * @param {Object} cardData Данные карточки.
+ * @param {number} userId Индентификатор пользователя.
  * @param {Object} callbacks Функции callback.
  * @return {Element} Элемент карточки
  */
-export function renderCard (cardData, callbacks) {
+export function renderCard (cardData, userId,  callbacks) {
   const cardElement = cardTemplate.querySelector(cardSelector).cloneNode(true)
   const { contents, buttons } = getCardElements(cardElement)
+  const cardId = cardData.owner['_id'];
 
   contents.image.src = cardData.link
   contents.image.alt = cardData.name
@@ -55,7 +49,11 @@ export function renderCard (cardData, callbacks) {
     contents.likeCounter.textContent = cardData.likes.length;
   }
 
-  buttons.delete.addEventListener('click', callbacks.deleteCard)
+  if (cardId === userId) {
+    buttons.delete.classList.add('card__delete-button_is-active');
+    buttons.delete.addEventListener('click',  (event) => callbacks.deleteCard(event, cardId))
+  }
+
   buttons.like.addEventListener('click', callbacks.likeCard)
   contents.image.addEventListener('click', callbacks.openGallery)
 
