@@ -35,6 +35,24 @@ const popupSelectors = {
   errorClass: 'popup__error_visible'
 }
 
+const handleCardDelete = ({ cardId, buttonElement }) => {
+  // так как по сути кнопка "Да" все равно выполняет только ровно одну операцию как confirm()
+  popupConfirmButton.onclick = () => {
+    buttonElement.disabled = true;
+
+    APIDeleteCard(cardId)
+        .then(() => {
+          buttonElement.closest('.card').remove();
+
+          closeModal(popupConfirm);
+        })
+        .catch((error) => {
+          buttonElement.disabled = false;
+          console.error(error);
+        });
+  };
+};
+
 /**
  * Обработчик открытия popup'а.
  * @param {string} name Название popup'а.
@@ -91,10 +109,7 @@ forms.addCard.addEventListener('submit', (event) => {
     link: forms.addCard.link.value
   })
     .then((data) => {
-      cardList.prepend(getCardElement({
-        name: data.name,
-        link: data.link
-      }))
+      cardList.prepend(getCardElement(data))
 
       closePopup()
       forms.addCard.reset()

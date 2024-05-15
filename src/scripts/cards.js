@@ -26,11 +26,12 @@ export function likeCard (event) {
 const getCardElements = (element) => ({
   contents: {
     title: element.querySelector('.card__title'),
-    image: element.querySelector('.card__image')
+    image: element.querySelector('.card__image'),
+    likeCounter: element.querySelector('.card__like-counter'),
   },
   buttons: {
     delete: element.querySelector('.card__delete-button'),
-    like: element.querySelector('.card__like-button')
+    like: element.querySelector('.card__like-button'),
   }
 })
 
@@ -48,6 +49,11 @@ export function renderCard (cardData, callbacks) {
   contents.image.alt = cardData.name
 
   contents.title.textContent = cardData.name
+
+  if (Array.isArray(cardData.likes) && cardData.likes.length > 0) {
+    contents.likeCounter.classList.add('card__like-counter_is-active');
+    contents.likeCounter.textContent = cardData.likes.length;
+  }
 
   buttons.delete.addEventListener('click', callbacks.deleteCard)
   buttons.like.addEventListener('click', callbacks.likeCard)

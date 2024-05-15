@@ -18,3 +18,17 @@
 .card__like-button:hover {
   opacity: 0.6;
 }
+
+.card__reaction {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+}
+
+.card__like-counter {
+  color: #000;
+  text-align: center;
+  font-size: 13px;
+  line-height: normal;
+  display: none;
+}
