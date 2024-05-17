@@ -77,5 +77,15 @@ export const RemoteAPI = {
     fetch(`${config.baseUrl}/cards/${id}`, {
       method: 'DELETE',
       headers: config.headers
-    }).then(handleResponse)
+    }).then(handleResponse),
+
+  likeCard: (cardId) => fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'PUT',
+    headers: config.headers
+  }).then(handleResponse),
+
+  unLikeCard: (cardId) => fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    headers: config.headers,
+    method: 'DELETE'
+  }).then(handleResponse)
 }

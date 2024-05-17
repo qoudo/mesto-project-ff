@@ -1,4 +1,4 @@
-import {cardSelector, likeCard, renderCard} from './scripts/cards'
+import { cardSelector, renderCard } from './scripts/cards'
 import { closePopup, openPopup } from './scripts/popups'
 import { initEditForm, addProfile } from './scripts/profile'
 import { initGallery } from './scripts/gallery'
@@ -12,7 +12,7 @@ export const popupKeys = {
   edit: 'edit',
   addCard: 'addCard',
   gallery: 'gallery',
-  deleteCard: 'deleteCard',
+  deleteCard: 'deleteCard'
 }
 const forms = {
   edit: document.forms['edit-profile'],
@@ -47,12 +47,36 @@ function handleDeleteCard (event, cardId) {
 
   popups.deleteCard.querySelector(popupSelectors.submitButtonSelector).addEventListener('click', () => {
     RemoteAPI.deleteCard(cardId)
-        .then(() => {
-          event.target.closest(cardSelector).remove();
-          closePopup()
-        })
-        .catch(handleError);
+      .then(() => {
+        event.target.closest(cardSelector).remove()
+        closePopup()
+      })
+      .catch(handleError)
   })
+};
+
+/**
+ * Обработчик кнопки "нравится".
+ * @param {CloseEvent} event Cобытие клика.
+ * @param {number} cardId Индентификатор карточки.
+ * @param {HTMLSpanElement} likeCounter Счетчик лайков.
+ */
+function handleToggleLike (event, cardId, likeCounter) {
+  if (event.target.classList.contains('card__like-button_is-active')) {
+    RemoteAPI.unLikeCard(cardId)
+      .then((data) => {
+        event.target.classList.remove('card__like-button_is-active')
+        likeCounter.textContent = data.likes.length
+      })
+      .catch(handleError)
+  } else {
+    RemoteAPI.likeCard(cardId)
+      .then((data) => {
+        event.target.classList.add('card__like-button_is-active')
+        likeCounter.textContent = data.likes.length
+      })
+      .catch(handleError)
+  }
 };
 
 /**
@@ -85,12 +109,12 @@ function handleAddCard (event) {
     name: forms.addCard['place-name'].value,
     link: forms.addCard.link.value
   })
-      .then((data) => {
-        cardList.prepend(getCardElement(data, data.owner['_id']))
-        closePopup()
-        forms.addCard.reset()
-      })
-      .catch(handleError)
+    .then((data) => {
+      cardList.prepend(getCardElement(data, data.owner._id))
+      closePopup()
+      forms.addCard.reset()
+    })
+    .catch(handleError)
 }
 
 /**
@@ -104,13 +128,12 @@ function handleUpdateUser (event) {
     name: forms.edit.name.value,
     about: forms.edit.description.value
   })
-      .then((data) => {
-        addProfile(data)
-        closePopup()
-      })
-      .catch(handleError)
+    .then((data) => {
+      addProfile(data)
+      closePopup()
+    })
+    .catch(handleError)
 }
-
 
 /**
  * Возвращает элемент карточки.
@@ -118,8 +141,8 @@ function handleUpdateUser (event) {
  * @param {number} userId Индентификатор пользователя.
  */
 const getCardElement = (data, userId) => renderCard(data, userId, {
-  deleteCard: (event) => handleDeleteCard(event, data['_id']),
-  likeCard,
+  deleteCard: (event) => handleDeleteCard(event, data._id),
+  likeCard: (event, likeCounter) => handleToggleLike(event, data._id, likeCounter),
   openGallery: () => handleOpenPopup(popupKeys.gallery, data)
 })
 
@@ -139,6 +162,6 @@ Promise.all([RemoteAPI.getUser(), RemoteAPI.getCards()])
     // Инициализация пользователя
     addProfile(user)
     // Выводим карточки на страницу
-    cardList.append(...cards.map( (item) => getCardElement(item, id)))
+    cardList.append(...cards.map((item) => getCardElement(item, id)))
   })
   .catch(handleError)
