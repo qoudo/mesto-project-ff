@@ -1,6 +1,6 @@
 import { cardSelector, renderCard } from './scripts/cards'
 import { closePopup, openPopup } from './scripts/popups'
-import { initEditForm, addProfile } from './scripts/profile'
+import { initEditForm, addProfile, profileElements } from './scripts/profile'
 import { initGallery } from './scripts/gallery'
 import { enableValidation, clearValidation } from './scripts/validation'
 import './styles/index.css'
@@ -13,12 +13,12 @@ export const popupKeys = {
   addCard: 'addCard',
   gallery: 'gallery',
   deleteCard: 'deleteCard',
-    updateAvatar: 'updateAvatar'
+  updateAvatar: 'updateAvatar'
 }
 const forms = {
   edit: document.forms['edit-profile'],
   addCard: document.forms['new-place'],
-    updateAvatar: document.forms['update-avatar']
+  updateAvatar: document.forms['update-avatar']
 }
 const buttons = [
   { edit: content.querySelector('.profile__edit-button'), name: popupKeys.edit },
@@ -140,6 +140,22 @@ function handleUpdateUser (event) {
 }
 
 /**
+ * Обработчик обновление аватара.
+ * @param {Event} event Объект события.
+ */
+function handleUpdateAvatar (event) {
+  const url = forms.updateAvatar.avatar.value
+  event.preventDefault()
+  RemoteAPI.updateAvatar(url)
+    .then(() => {
+      profileElements.avatar.style.backgroundImage = `url(${url})`
+      closePopup()
+      forms.updateAvatar.reset()
+    })
+    .catch(handleError)
+}
+
+/**
  * Возвращает элемент карточки.
  * @param {object} data Данные карточки.
  * @param {number} userId Индентификатор пользователя.
@@ -153,9 +169,11 @@ const getCardElement = (data, userId) => renderCard(data, userId, {
 // Открытие попапов
 buttons.forEach(({ name, ...item }) => item[name].addEventListener('click', () => handleOpenPopup(name)))
 // Слушаем событие отправки формы "Редактировать профиль"
-forms.edit.addEventListener('submit', (event) => handleUpdateUser)
+forms.edit.addEventListener('submit', handleUpdateUser)
 // Слушаем событие отправки формы "Добавить карточку"
-forms.addCard.addEventListener('submit', (event) => handleAddCard)
+forms.addCard.addEventListener('submit', handleAddCard)
+// Слушаем событие отправки формы "Обновить аватар"
+forms.updateAvatar.addEventListener('submit', handleUpdateAvatar)
 
 // Запускаем валидацию форм
 enableValidation(popupSelectors)

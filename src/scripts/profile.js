@@ -1,4 +1,4 @@
-const profileElements = {
+export const profileElements = {
   name: document.querySelector('.profile__title'),
   description: document.querySelector('.profile__description'),
   avatar: document.querySelector('.profile__image')
