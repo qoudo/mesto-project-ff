@@ -23,7 +23,7 @@ const forms = {
 const buttons = [
   { edit: content.querySelector('.profile__edit-button'), name: popupKeys.edit },
   { addCard: content.querySelector('.profile__add-button'), name: popupKeys.addCard },
-  { updateAvatar: content.querySelector('.profile__image'), name: popupKeys.updateAvatar }
+  { updateAvatar: content.querySelector('.profile__image-button'), name: popupKeys.updateAvatar }
 ]
 const popups = {
   edit: document.querySelector('.popup_type_edit'),
