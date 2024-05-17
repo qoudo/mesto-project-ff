@@ -21,7 +21,7 @@ export const handleResponse = response => {
   if (response.ok) {
     return response.json()
   } else {
-    return Promise.reject(`Ошибка: ${response.status}`)
+    return Promise.reject(new Error(`Ошибка: ${response.status}`))
   }
 }
 

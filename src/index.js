@@ -41,6 +41,28 @@ const popupSelectors = {
   errorClass: 'popup__error_visible'
 }
 
+const statuses = {
+  request: 'request',
+  success: 'success'
+}
+
+/**
+ * Переключатель лоадера.
+ * @param {HTMLFormElement} form Форма.
+ * @param {string} status Статус.
+ */
+const toggleLoader = (form, status) => {
+  const button = form.querySelector(popupSelectors.submitButtonSelector)
+
+  switch (status) {
+    case statuses.request:
+      button.textContent = 'Сохранение...'
+      break
+    case statuses.success:
+      button.textContent = 'Сохранить'
+  }
+}
+
 /**
  * Обработчик удаления карточки.
  * @param {CloseEvent} event Cобытие клика.
@@ -57,7 +79,7 @@ function handleDeleteCard (event, cardId) {
       })
       .catch(handleError)
   })
-};
+}
 
 /**
  * Обработчик кнопки "нравится".
@@ -81,7 +103,7 @@ function handleToggleLike (event, cardId, likeCounter) {
       })
       .catch(handleError)
   }
-};
+}
 
 /**
  * Обработчик открытия popup'а.
@@ -109,6 +131,7 @@ function handleOpenPopup (name, data) {
 function handleAddCard (event) {
   event.preventDefault()
 
+  toggleLoader(forms.addCard, statuses.request)
   RemoteAPI.addCard({
     name: forms.addCard['place-name'].value,
     link: forms.addCard.link.value
@@ -119,6 +142,7 @@ function handleAddCard (event) {
       forms.addCard.reset()
     })
     .catch(handleError)
+    .finally(() => toggleLoader(forms.addCard, statuses.success))
 }
 
 /**
@@ -127,6 +151,7 @@ function handleAddCard (event) {
  */
 function handleUpdateUser (event) {
   event.preventDefault()
+  toggleLoader(forms.edit, statuses.request)
 
   RemoteAPI.updateUser({
     name: forms.edit.name.value,
@@ -137,6 +162,7 @@ function handleUpdateUser (event) {
       closePopup()
     })
     .catch(handleError)
+    .finally(() => toggleLoader(forms.edit, statuses.success))
 }
 
 /**
@@ -146,6 +172,8 @@ function handleUpdateUser (event) {
 function handleUpdateAvatar (event) {
   const url = forms.updateAvatar.avatar.value
   event.preventDefault()
+  toggleLoader(forms.updateAvatar, statuses.request)
+
   RemoteAPI.updateAvatar(url)
     .then(() => {
       profileElements.avatar.style.backgroundImage = `url(${url})`
@@ -153,6 +181,7 @@ function handleUpdateAvatar (event) {
       forms.updateAvatar.reset()
     })
     .catch(handleError)
+    .finally(() => toggleLoader(forms.updateAvatar, statuses.success))
 }
 
 /**
