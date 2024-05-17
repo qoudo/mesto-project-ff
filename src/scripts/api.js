@@ -79,13 +79,34 @@ export const RemoteAPI = {
       headers: config.headers
     }).then(handleResponse),
 
+  /**
+     * Лайк карточки.
+     * @param {number} cardId Индентификатор карточки.
+     */
   likeCard: (cardId) => fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers
   }).then(handleResponse),
 
+  /**
+     * Дизлайк карточки.
+     * @param {number} cardId Индентификатор карточки.
+     */
   unLikeCard: (cardId) => fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     headers: config.headers,
     method: 'DELETE'
-  }).then(handleResponse)
+  }).then(handleResponse),
+
+  /**
+     * Обновление аватара.
+     * @param {string} url Ссылка на изображение.
+     */
+  updateAvatar: (url) =>
+    fetch(`${config.baseUrl}/users/me/avatar`, {
+      headers: config.headers,
+      method: 'PATCH',
+      body: JSON.stringify({
+        avatar: url
+      })
+    }).then(handleResponse)
 }

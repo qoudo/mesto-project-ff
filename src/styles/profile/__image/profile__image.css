@@ -32,8 +32,8 @@
   left: 50%;
   width: 26px;
   height: 26px;
-  opacity: 0;
   background: url('../../../images/big-edit-icon.svg');
+  opacity: 0;
   transform: translate(-50%, -50%);
 }
 
