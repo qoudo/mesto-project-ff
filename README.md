@@ -1,3 +1,5 @@
 # Проектная работа Mesto
 
-https://github.com/qoudo/mesto-project-ff
+repository: https://github.com/qoudo/mesto-project-ff
+
+Github page: https://qoudo.github.io/mesto-project-ff/
