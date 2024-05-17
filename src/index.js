@@ -12,21 +12,25 @@ export const popupKeys = {
   edit: 'edit',
   addCard: 'addCard',
   gallery: 'gallery',
-  deleteCard: 'deleteCard'
+  deleteCard: 'deleteCard',
+    updateAvatar: 'updateAvatar'
 }
 const forms = {
   edit: document.forms['edit-profile'],
-  addCard: document.forms['new-place']
+  addCard: document.forms['new-place'],
+    updateAvatar: document.forms['update-avatar']
 }
 const buttons = [
   { edit: content.querySelector('.profile__edit-button'), name: popupKeys.edit },
-  { addCard: content.querySelector('.profile__add-button'), name: popupKeys.addCard }
+  { addCard: content.querySelector('.profile__add-button'), name: popupKeys.addCard },
+  { updateAvatar: content.querySelector('.profile__image'), name: popupKeys.updateAvatar }
 ]
 const popups = {
   edit: document.querySelector('.popup_type_edit'),
   addCard: document.querySelector('.popup_type_new-card'),
   gallery: document.querySelector('.popup_type_image'),
-  deleteCard: document.querySelector('.popup_type_delete-card')
+  deleteCard: document.querySelector('.popup_type_delete-card'),
+  updateAvatar: document.querySelector('.popup_type_update-avatar')
 }
 const popupSelectors = {
   formSelector: '.popup__form',
