@@ -43,10 +43,9 @@ export function renderCard (cardData, userId,  callbacks) {
   contents.title.textContent = cardData.name
   contents.likeCounter.textContent = cardData.likes.length;
 
-  console.log(cardData);
   if (cardData.owner['_id'] === userId) {
     buttons.delete.classList.add('card__delete-button_is-active');
-    buttons.delete.addEventListener('click',  (event) => callbacks.deleteCard(event, cardData['_id']))
+    buttons.delete.addEventListener('click',  callbacks.deleteCard)
   }
 
   buttons.like.addEventListener('click', callbacks.likeCard)
