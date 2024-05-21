@@ -63,23 +63,27 @@ const toggleLoader = (form, status) => {
   }
 }
 
+let cardToDeleteId, cardToDelete
+
 /**
  * Обработчик удаления карточки.
  * @param {CloseEvent} event Cобытие клика.
  * @param {number} cardId Индентификатор карточки.
  */
 function handleDeleteCard (event, cardId) {
+  cardToDeleteId = cardId
+  cardToDelete = event.target.closest(cardSelector)
   openPopup(popups.deleteCard)
+}
 
-  popups.deleteCard.querySelector(popupSelectors.submitButtonSelector).onclick = () => {
-    RemoteAPI.deleteCard(cardId)
+popups.deleteCard.querySelector(popupSelectors.submitButtonSelector).addEventListener('click', () => {
+  RemoteAPI.deleteCard(cardToDeleteId)
       .then(() => {
-        event.target.closest(cardSelector).remove()
+        cardToDelete.remove()
         closePopup()
       })
       .catch(handleError)
-  }
-}
+})
 
 /**
  * Обработчик кнопки "нравится".
