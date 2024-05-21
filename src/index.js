@@ -46,6 +46,9 @@ const statuses = {
   success: 'success'
 }
 
+let cardToDeleteId, cardToDelete
+
+
 /**
  * Переключатель лоадера.
  * @param {HTMLFormElement} form Форма.
@@ -62,8 +65,6 @@ const toggleLoader = (form, status) => {
       button.textContent = 'Сохранить'
   }
 }
-
-let cardToDeleteId, cardToDelete
 
 /**
  * Инициализирует удаления карточки.
