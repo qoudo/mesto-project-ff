@@ -71,14 +71,14 @@ const toggleLoader = (form, status) => {
 function handleDeleteCard (event, cardId) {
   openPopup(popups.deleteCard)
 
-  popups.deleteCard.querySelector(popupSelectors.submitButtonSelector).addEventListener('click', () => {
+  popups.deleteCard.querySelector(popupSelectors.submitButtonSelector).onclick = () => {
     RemoteAPI.deleteCard(cardId)
       .then(() => {
         event.target.closest(cardSelector).remove()
         closePopup()
       })
       .catch(handleError)
-  })
+  }
 }
 
 /**
