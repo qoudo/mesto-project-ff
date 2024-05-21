@@ -2,8 +2,6 @@ export const cardSelector = '.card'
 
 const cardTemplate = document.querySelector('#card-template').content
 
-export let cardToDeleteId, cardToDelete
-
 /**
  * Возвращает элементы карточки.
  * @param {Element} element Данные карточки.
@@ -50,14 +48,4 @@ export function renderCard ({ likes, link, name, owner }, userId, callbacks) {
   contents.image.addEventListener('click', callbacks.openGallery)
 
   return cardElement
-}
-
-/**
- * Инициализирует удаления карточки.
- * @param {CloseEvent} event Cобытие клика.
- * @param {number} cardId Индентификатор карточки.
- */
-export function initDeleteCard (event, cardId) {
-  cardToDeleteId = cardId
-  cardToDelete = event.target.closest(cardSelector)
 }

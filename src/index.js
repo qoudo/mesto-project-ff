@@ -1,4 +1,4 @@
-import { cardToDelete, cardToDeleteId, initDeleteCard, renderCard } from './scripts/card'
+import { cardSelector, renderCard } from './scripts/card'
 import { closePopup, openPopup } from './scripts/popups'
 import { initEditForm, addProfile, profileElements } from './scripts/profile'
 import { initGallery } from './scripts/gallery'
@@ -63,6 +63,19 @@ const toggleLoader = (form, status) => {
   }
 }
 
+let cardToDeleteId, cardToDelete
+
+/**
+ * Инициализирует удаления карточки.
+ * @param {CloseEvent} event Cобытие клика.
+ * @param {number} cardId Индентификатор карточки.
+ */
+function initDeleteCard (event, cardId) {
+  cardToDeleteId = cardId
+  cardToDelete = event.target.closest(cardSelector)
+  openPopup(popups.deleteCard)
+}
+
 /**
  * Обработчик удаления карточки.
  */
@@ -98,9 +111,8 @@ function handleToggleLike (event, cardId, likeCounter) {
  * Обработчик открытия popup'а.
  * @param {string} name Название popup'а.
  * @param {object} [data] Данные popup'а.
- * @param {Event} [event] Событие клика.
  */
-function handleOpenPopup (name, data, event) {
+function handleOpenPopup (name, data) {
   switch (name) {
     case popupKeys.edit:
       initEditForm(forms.edit)
@@ -108,12 +120,9 @@ function handleOpenPopup (name, data, event) {
     case popupKeys.gallery:
       initGallery(data)
       break
-    case popupKeys.deleteCard:
-      initDeleteCard(event, data['_id'])
-      break
   }
 
-  name !== popupKeys.deleteCard && clearValidation(popupConfig, popups[name])
+  clearValidation(popupConfig, popups[name])
   openPopup(popups[name])
 }
 
@@ -183,7 +192,7 @@ function handleUpdateAvatar (event) {
  * @param {number} userId Индентификатор пользователя.
  */
 const getCardElement = (data, userId) => renderCard(data, userId, {
-  deleteCard: (event) => handleOpenPopup(popupKeys.deleteCard, data, event),
+  deleteCard: (event) => initDeleteCard(event, data._id),
   likeCard: (event, likeCounter) => handleToggleLike(event, data._id, likeCounter),
   openGallery: () => handleOpenPopup(popupKeys.gallery, data)
 })
