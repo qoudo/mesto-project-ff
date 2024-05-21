@@ -32,7 +32,7 @@ const popups = {
   deleteCard: document.querySelector('.popup_type_delete-card'),
   updateAvatar: document.querySelector('.popup_type_update-avatar')
 }
-const popupSelectors = {
+const popupConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button',
@@ -52,7 +52,7 @@ const statuses = {
  * @param {string} status Статус.
  */
 const toggleLoader = (form, status) => {
-  const button = form.querySelector(popupSelectors.submitButtonSelector)
+  const button = form.querySelector(popupConfig.submitButtonSelector)
 
   switch (status) {
     case statuses.request:
@@ -66,24 +66,27 @@ const toggleLoader = (form, status) => {
 let cardToDeleteId, cardToDelete
 
 /**
- * Обработчик удаления карточки.
+ * Инициализирует удаления карточки.
  * @param {CloseEvent} event Cобытие клика.
  * @param {number} cardId Индентификатор карточки.
  */
-function handleDeleteCard (event, cardId) {
+function initDeleteCard (event, cardId) {
   cardToDeleteId = cardId
   cardToDelete = event.target.closest(cardSelector)
   openPopup(popups.deleteCard)
 }
 
-popups.deleteCard.querySelector(popupSelectors.submitButtonSelector).addEventListener('click', () => {
+/**
+ * Обработчик удаления карточки.
+ */
+function handleDeleteCard () {
   RemoteAPI.deleteCard(cardToDeleteId)
       .then(() => {
         cardToDelete.remove()
         closePopup()
       })
       .catch(handleError)
-})
+}
 
 /**
  * Обработчик кнопки "нравится".
@@ -119,7 +122,7 @@ function handleOpenPopup (name, data) {
       break
   }
 
-  clearValidation(popupSelectors)
+  clearValidation(popupConfig, popups[name])
   openPopup(popups[name])
 }
 
@@ -189,7 +192,7 @@ function handleUpdateAvatar (event) {
  * @param {number} userId Индентификатор пользователя.
  */
 const getCardElement = (data, userId) => renderCard(data, userId, {
-  deleteCard: (event) => handleDeleteCard(event, data._id),
+  deleteCard: (event) => initDeleteCard(event, data._id),
   likeCard: (event, likeCounter) => handleToggleLike(event, data._id, likeCounter),
   openGallery: () => handleOpenPopup(popupKeys.gallery, data)
 })
@@ -202,9 +205,11 @@ forms.edit.addEventListener('submit', handleUpdateUser)
 forms.addCard.addEventListener('submit', handleAddCard)
 // Слушаем событие отправки формы "Обновить аватар"
 forms.updateAvatar.addEventListener('submit', handleUpdateAvatar)
+// Слушаем событие подтверждения удаления карточки
+popups.deleteCard.querySelector(popupConfig.submitButtonSelector).addEventListener('click', handleDeleteCard)
 
 // Запускаем валидацию форм
-enableValidation(popupSelectors)
+enableValidation(popupConfig)
 
 // Инициализируем загрузку данных пользотвателя и карточек
 Promise.all([RemoteAPI.getUser(), RemoteAPI.getCards()])
