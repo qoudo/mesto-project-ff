@@ -16,8 +16,10 @@ const hasInvalidInput = (inputList) => {
  */
 const toggleButtonState = (inputList, buttonElement, selectors) => {
   if (hasInvalidInput(inputList)) {
+    buttonElement.disabled = true
     buttonElement.classList.add(selectors.inactiveButtonClass)
   } else {
+    buttonElement.disabled = false
     buttonElement.classList.remove(selectors.inactiveButtonClass)
   }
 }
@@ -101,7 +103,7 @@ export const clearValidation = (
 
     inputList.forEach((inputElement) => {
     hideInputError(form, inputElement, config)
-
+    form.reset()
     toggleButtonState(inputList, submitButtonElement, config)
   })
 }
