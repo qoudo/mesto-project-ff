@@ -1,4 +1,4 @@
-import { cardSelector, renderCard } from './scripts/cards'
+import { cardSelector, renderCard } from './scripts/card'
 import { closePopup, openPopup } from './scripts/popups'
 import { initEditForm, addProfile, profileElements } from './scripts/profile'
 import { initGallery } from './scripts/gallery'
@@ -88,21 +88,16 @@ function handleDeleteCard (event, cardId) {
  * @param {HTMLSpanElement} likeCounter Счетчик лайков.
  */
 function handleToggleLike (event, cardId, likeCounter) {
-  if (event.target.classList.contains('card__like-button_is-active')) {
-    RemoteAPI.unLikeCard(cardId)
+  const likeMethod = event.target.classList.contains('card__like-button_is-active')
+      ? RemoteAPI.unLikeCard
+      : RemoteAPI.likeCard;
+
+  likeMethod(cardId)
       .then((data) => {
-        event.target.classList.remove('card__like-button_is-active')
+        event.target.classList.toggle('card__like-button_is-active')
         likeCounter.textContent = data.likes.length
       })
-      .catch(handleError)
-  } else {
-    RemoteAPI.likeCard(cardId)
-      .then((data) => {
-        event.target.classList.add('card__like-button_is-active')
-        likeCounter.textContent = data.likes.length
-      })
-      .catch(handleError)
-  }
+      .catch(handleError);
 }
 
 /**
@@ -175,8 +170,8 @@ function handleUpdateAvatar (event) {
   toggleLoader(forms.updateAvatar, statuses.request)
 
   RemoteAPI.updateAvatar(url)
-    .then(() => {
-      profileElements.avatar.style.backgroundImage = `url(${url})`
+    .then((data) => {
+      profileElements.avatar.style.backgroundImage = `url(${data.avatar})`
       closePopup()
       forms.updateAvatar.reset()
     })
