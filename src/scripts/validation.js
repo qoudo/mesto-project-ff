@@ -12,15 +12,15 @@ const hasInvalidInput = (inputList) => {
  * Переключает состояние кнопки активная/неактивная.
  * @param {Array<HTMLInputElement>} inputList Коллекция полей.
  * @param {HTMLButtonElement} buttonElement Кнопка.
- * @param {object} selectors Набор селекторов.
+ * @param {object} config Конфигурация.
  */
-const toggleButtonState = (inputList, buttonElement, selectors) => {
+const toggleButtonState = (inputList, buttonElement, config) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.disabled = true
-    buttonElement.classList.add(selectors.inactiveButtonClass)
+    buttonElement.classList.add(config.inactiveButtonClass)
   } else {
     buttonElement.disabled = false
-    buttonElement.classList.remove(selectors.inactiveButtonClass)
+    buttonElement.classList.remove(config.inactiveButtonClass)
   }
 }
 
@@ -29,25 +29,25 @@ const toggleButtonState = (inputList, buttonElement, selectors) => {
  * @param {HTMLFormElement} formElement Форма.
  * @param {HTMLInputElement} inputElement Инпут.
  * @param {string} errorMessage Сообщение.
- * @param {object} selectors Набор селекторов.
+ * @param {object} config Конфигурация.
  */
-const showInputError = (formElement, inputElement, errorMessage, selectors) => {
+const showInputError = (formElement, inputElement, errorMessage, config) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`)
-  inputElement.classList.add(selectors.inputErrorClass)
+  inputElement.classList.add(config.inputErrorClass)
   errorElement.textContent = errorMessage
-  errorElement.classList.add(selectors.errorClass)
+  errorElement.classList.add(config.errorClass)
 }
 
 /**
  * Прятает сообщение об ошибке.
  * @param {HTMLFormElement} formElement Форма.
  * @param {HTMLInputElement} inputElement Инпут.
- * @param {object} selectors Набор селекторов.
+ * @param {object} config Конфигурация.
  */
-const hideInputError = (formElement, inputElement, selectors) => {
+const hideInputError = (formElement, inputElement, config) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`)
-  inputElement.classList.remove(selectors.inputErrorClass)
-  errorElement.classList.remove(selectors.errorClass)
+  inputElement.classList.remove(config.inputErrorClass)
+  errorElement.classList.remove(config.errorClass)
   errorElement.textContent = ''
 }
 
@@ -55,9 +55,9 @@ const hideInputError = (formElement, inputElement, selectors) => {
  * Проверяет поле на валидность.
  * @param {HTMLFormElement} formElement Форма.
  * @param {HTMLInputElement} inputElement Инпут.
- * @param {object} selectors Набор селекторов.
+ * @param {object} config Конфигурация.
  */
-const checkInputValidity = (formElement, inputElement, selectors) => {
+const checkInputValidity = (formElement, inputElement, config) => {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage)
   } else {
@@ -65,32 +65,32 @@ const checkInputValidity = (formElement, inputElement, selectors) => {
   }
 
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, selectors)
+    showInputError(formElement, inputElement, inputElement.validationMessage, config)
   } else {
-    hideInputError(formElement, inputElement, selectors)
+    hideInputError(formElement, inputElement, config)
   }
 }
 
 /**
  * Устанавливает слушателя событий.
  * @param {HTMLFormElement} formElement Форма.
- * @param {object} selectors Набор селекторов.
+ * @param {object} config Конфигурация.
  */
-const setEventListeners = (formElement, selectors) => {
-  const inputList = Array.from(formElement.querySelectorAll(selectors.inputSelector))
-  const buttonElement = formElement.querySelector(selectors.submitButtonSelector)
-  toggleButtonState(inputList, buttonElement, selectors)
+const setEventListeners = (formElement, config) => {
+  const inputList = Array.from(formElement.querySelectorAll(config.inputSelector))
+  const buttonElement = formElement.querySelector(config.submitButtonSelector)
+  toggleButtonState(inputList, buttonElement, config)
   inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', function () {
-      checkInputValidity(formElement, inputElement, selectors)
-      toggleButtonState(inputList, buttonElement, selectors)
+      checkInputValidity(formElement, inputElement, config)
+      toggleButtonState(inputList, buttonElement, config)
     })
   })
 }
 
 /**
  * Отчищает ошибки форм.
- * @param {object} config Набор селекторов.
+ * @param {object} config Конфигурация.
  * @param {HTMLDivElement} popup Попап.
  */
 export const clearValidation = (
@@ -110,14 +110,14 @@ export const clearValidation = (
 
 /**
  * Включает валидацию полей форм.
- * @param {object} selectors Набор селекторов.
+ * @param {object} config Конфигурация.
  */
-export const enableValidation = (selectors) => {
-  const formList = Array.from(document.querySelectorAll(selectors.formSelector))
+export const enableValidation = (config) => {
+  const formList = Array.from(document.querySelectorAll(config.formSelector))
   formList.forEach((formElement) => {
     formElement.addEventListener('submit', function (evt) {
       evt.preventDefault()
     })
-    setEventListeners(formElement, selectors)
+    setEventListeners(formElement, config)
   })
 }
