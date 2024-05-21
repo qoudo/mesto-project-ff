@@ -88,21 +88,21 @@ const setEventListeners = (formElement, selectors) => {
 
 /**
  * Отчищает ошибки форм.
- * @param {object} selectors Набор селекторов.
+ * @param {object} config Набор селекторов.
+ * @param {HTMLDivElement} popup Попап.
  */
 export const clearValidation = (
-  selectors
+  config,
+  popup
 ) => {
-  const formList = Array.from(document.querySelectorAll(selectors.formSelector))
-  formList.forEach((formElement) => {
-    const inputList = [...formElement.querySelectorAll(selectors.inputSelector)]
-    const submitButtonElement = formElement.querySelector(selectors.submitButtonSelector)
+  const form = popup.querySelector(config.formSelector)
+  const inputList = [...form.querySelectorAll(config.inputSelector)]
+  const submitButtonElement = form.querySelector(config.submitButtonSelector)
 
     inputList.forEach((inputElement) => {
-      hideInputError(formElement, inputElement, selectors)
-    })
+    hideInputError(form, inputElement, config)
 
-    toggleButtonState(inputList, submitButtonElement, selectors)
+    toggleButtonState(inputList, submitButtonElement, config)
   })
 }
 
